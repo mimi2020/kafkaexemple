@@ -1,0 +1,34 @@
+name: Déploiement automatique (Compose)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Récupération du code
+        uses: actions/checkout@v3
+
+      - name: 🐳 Vérifier Docker et Compose
+        run: |
+          docker --version
+          docker compose version
+
+      - name: 🚀 Déploiement avec Docker Compose (local ou distant)
+        run: |
+          echo "=== 🚧 Début du déploiement avec Docker Compose ==="
+
+          # Stopper les anciens conteneurs
+          docker compose down
+
+          # Reconstruire et relancer tout le stack
+          docker compose up -d --build
+
+          # Afficher les conteneurs actifs
+          docker compose ps
+
+          echo "=== ✅ Déploiement terminé ==="

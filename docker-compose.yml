@@ -1,0 +1,79 @@
+
+
+services:
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    container_name: zookeeper
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    networks:
+#      - app-network
+
+#
+
+  db:
+    image: postgres:17
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: kafkaexempledb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Expose for external tools (optional)
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+#  timescaledb:
+#      image: timescale/timescaledb:latest-pg17  # ou latest-pg15 selon besoin
+#      container_name: timescaledb
+#      restart: always
+#      environment:
+#        POSTGRES_USER: postgres
+#        POSTGRES_PASSWORD: admin
+#        POSTGRES_DB: kafkaexempledb
+#      ports:
+#        - "5432:5432"
+#      healthcheck:
+#        test: [ "CMD", "pg_isready", "-U", "postgres" ]
+#        interval: 10s
+#        timeout: 5s
+#        retries: 5
+#
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-boot-app
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/kafkaexempledb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SERVER_PORT: 8090
+    depends_on:
+      db:
+        condition: service_healthy
+#      kafka:
+#        condition: service_started
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
