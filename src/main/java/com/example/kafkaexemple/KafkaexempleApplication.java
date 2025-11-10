@@ -9,6 +9,7 @@ public class KafkaexempleApplication {
 	public static void main(String[] args) {
 
 		System.out.println("*****Application is started ****");
+		System.out.println("*****Testing out ****");
 		SpringApplication.run(KafkaexempleApplication.class, args);
 	}
 
