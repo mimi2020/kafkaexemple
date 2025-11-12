@@ -18,6 +18,6 @@ public class KafkaController {
     @GetMapping("/publish")
     public ResponseEntity<String> publish(@RequestParam String message){
         this.producerService.sendMessage(message);
-        return ResponseEntity.ok("message send to kafka"+message);
+        return ResponseEntity.ok("message IS sendT to kafka"+message);
     }
 }
