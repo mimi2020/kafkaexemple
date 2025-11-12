@@ -16,19 +16,19 @@ jobs:
       - name: 🐳 Vérifier Docker et Compose
         run: |
           docker --version
-          docker-compose version
+          docker compose version
 
       - name: 🚀 Déploiement avec Docker Compose (local ou distant)
         run: |
           echo "=== 🚧 Début du déploiement avec Docker Compose ==="
 
           # Stopper les anciens conteneurs
-          docker-compose down
+          docker compose down
 
           # Reconstruire et relancer tout le stack
-          docker-compose up -d --build
+          docker compose up -d --build
 
           # Afficher les conteneurs actifs
-          docker-compose ps
+          docker compose ps
 
           echo "=== ✅ Déploiement terminé ==="
