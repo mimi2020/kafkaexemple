@@ -62,7 +62,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: admin
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
 #      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      SERVER_PORT: 8090
+      SERVER_PORT: 8091:8090
     depends_on:
       db:
         condition: service_healthy
